@@ -1,9 +1,11 @@
 package project.personal.api.gerenciador_tarefa.controllers;
 
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.personal.api.gerenciador_tarefa.dtos.QuadroDTO;
 import project.personal.api.gerenciador_tarefa.dtos.SaidaQuadroDTO;
+import project.personal.api.gerenciador_tarefa.dtos.SaidaTarefaDTO;
 import project.personal.api.gerenciador_tarefa.models.Quadro;
 import project.personal.api.gerenciador_tarefa.service.QuadroService;
 
@@ -22,10 +24,12 @@ public class QuadroController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<String> criarQuadro(@RequestBody QuadroDTO dto) {
         service.salvar(dto);
         return ResponseEntity.ok("Quadro: " + dto.titulo());
     }
+
 
     @GetMapping
     public ResponseEntity<List<SaidaQuadroDTO>> mostraQuadroUsuario() {

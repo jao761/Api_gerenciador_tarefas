@@ -1,10 +1,10 @@
 package project.personal.api.gerenciador_tarefa.service;
 
-import org.springframework.expression.spel.ast.QualifiedIdentifier;
-import org.springframework.stereotype.Repository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import project.personal.api.gerenciador_tarefa.dtos.QuadroDTO;
 import project.personal.api.gerenciador_tarefa.models.Quadro;
+import project.personal.api.gerenciador_tarefa.models.Tarefa;
 import project.personal.api.gerenciador_tarefa.repositories.QuadroRepository;
 
 import java.util.List;
@@ -19,15 +19,14 @@ public class QuadroService {
     }
 
     public void salvar(QuadroDTO dto) {
-        repository.salvar(dto.titulo());
+        repository.save(new Quadro(dto));
     }
 
     public List<Quadro> listarQuadros() {
-        if (repository.getQuadros() == null) {
-            throw new NullPointerException("A lista noa deve estar vazia");
+        List<Quadro> listaQudros = repository.findAll();
+        if (listaQudros == null) {
+            throw new NullPointerException("A lista nao deve estar vazia");
         }
-        return repository.getQuadros();
+        return listaQudros;
     }
-
-
 }
