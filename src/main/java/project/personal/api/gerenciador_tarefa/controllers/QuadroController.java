@@ -1,6 +1,7 @@
 package project.personal.api.gerenciador_tarefa.controllers;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.personal.api.gerenciador_tarefa.dtos.QuadroDTO;
@@ -34,14 +35,14 @@ public class QuadroController {
     @GetMapping
     public ResponseEntity<List<SaidaQuadroDTO>> mostraQuadroUsuario() {
         List<Quadro> quadros = new ArrayList<>();
-        try {
             quadros = service.listarQuadros();
-        } catch (NullPointerException ex) {
-            return ResponseEntity.notFound().build();
-        }
         var quadrosDTO = quadros.stream().map(quadro -> new SaidaQuadroDTO(quadro)).toList();
         return ResponseEntity.ok(quadrosDTO);
     }
 
-
+    @PutMapping("/{id}")
+    public ResponseEntity<SaidaQuadroDTO> getQuadro(@PathVariable Long id, @RequestBody @Valid QuadroDTO dto) {
+        var quadro = service.atualizarQuadro(id, dto);
+        return ResponseEntity.ok(new SaidaQuadroDTO(quadro));
+    }
 }

@@ -26,6 +26,10 @@ public class Quadro {
         this.titulo = titulo;
     }
 
+    public void atualizar(QuadroDTO dto) {
+        this.titulo = dto.titulo();
+    }
+
     public Quadro() {
 
     }

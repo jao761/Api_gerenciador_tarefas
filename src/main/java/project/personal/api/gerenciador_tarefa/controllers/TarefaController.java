@@ -5,10 +5,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.personal.api.gerenciador_tarefa.dtos.DetalhamentoTarefaDto;
-import project.personal.api.gerenciador_tarefa.dtos.QuadroDTO;
 import project.personal.api.gerenciador_tarefa.dtos.SaidaTarefaDTO;
 import project.personal.api.gerenciador_tarefa.dtos.TarefaDTO;
-import project.personal.api.gerenciador_tarefa.models.Quadro;
 import project.personal.api.gerenciador_tarefa.models.Tarefa;
 import project.personal.api.gerenciador_tarefa.service.TarefaService;
 
@@ -40,7 +38,7 @@ public class TarefaController {
 
     @GetMapping("/quadros/{id}")
     public ResponseEntity<List<SaidaTarefaDTO>> getTarefaByQuadro(@PathVariable Long id) {
-        var tarefas = service.getQuadroByQuadro(id);
+        var tarefas = service.getQuadroById(id);
         return ResponseEntity.ok(tarefas.stream().map(t -> new SaidaTarefaDTO(t)).toList());
     }
 
