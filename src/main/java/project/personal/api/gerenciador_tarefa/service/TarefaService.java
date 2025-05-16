@@ -4,11 +4,13 @@ import org.springframework.stereotype.Service;
 import project.personal.api.gerenciador_tarefa.dtos.TarefaDTO;
 import project.personal.api.gerenciador_tarefa.enuns.StatusTarefa;
 import project.personal.api.gerenciador_tarefa.exceptions.CampoNaoEncontradoException;
+import project.personal.api.gerenciador_tarefa.models.Quadro;
 import project.personal.api.gerenciador_tarefa.models.Tarefa;
 import project.personal.api.gerenciador_tarefa.repositories.QuadroRepository;
 import project.personal.api.gerenciador_tarefa.repositories.TarefaRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TarefaService {
@@ -30,7 +32,7 @@ public class TarefaService {
         repository.save(tarefa);
     }
 
-    public Tarefa getQuadro(Long id) {
+    public Tarefa getTarefa(Long id) {
         var tarefa = repository.findById(id)
                 .orElseThrow(() -> new CampoNaoEncontradoException("Tarefa não encontrada"));
         return tarefa;
@@ -50,13 +52,17 @@ public class TarefaService {
         repository.delete(tarefa);
     }
 
-    public List<Tarefa> getQuadroById(Long id) {
+    public Map<Quadro, List<Tarefa>> getQuadroById(Long id) {
+        var quadro = quadroRepository.getReferenceById(id);
+
         var tarefas = repository.findAllByQuadroId(id);
         if (tarefas.isEmpty()) {
             throw new CampoNaoEncontradoException("Nenhuma tarefa encontrada para o quadro " + id);
-
         }
-        return tarefas;
+
+        Map<Quadro, List<Tarefa>> saidaQuadroTarefas = Map.of(quadro, tarefas);
+
+        return saidaQuadroTarefas;
     }
 
     public Tarefa marcarComoAprovado(Long id) {

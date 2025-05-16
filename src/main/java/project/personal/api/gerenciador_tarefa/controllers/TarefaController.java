@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import project.personal.api.gerenciador_tarefa.dtos.DetalhamentoTarefaDto;
 import project.personal.api.gerenciador_tarefa.dtos.SaidaTarefaDTO;
 import project.personal.api.gerenciador_tarefa.dtos.TarefaDTO;
+import project.personal.api.gerenciador_tarefa.models.Quadro;
 import project.personal.api.gerenciador_tarefa.models.Tarefa;
 import project.personal.api.gerenciador_tarefa.service.TarefaService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("tarefas")
@@ -31,15 +36,22 @@ public class TarefaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DetalhamentoTarefaDto> getTarefa(@PathVariable Long id) {
-        Tarefa tarefa = service.getQuadro(id);
+        Tarefa tarefa = service.getTarefa(id);
         return ResponseEntity.ok(new DetalhamentoTarefaDto(tarefa));
     }
 
 
     @GetMapping("/quadros/{id}")
-    public ResponseEntity<List<SaidaTarefaDTO>> getTarefaByQuadro(@PathVariable Long id) {
-        var tarefas = service.getQuadroById(id);
-        return ResponseEntity.ok(tarefas.stream().map(t -> new SaidaTarefaDTO(t)).toList());
+    public ResponseEntity<Map<String, List<SaidaTarefaDTO>>> getTarefaByQuadro(@PathVariable Long id) {
+        var tarefasQuadro = service.getQuadroById(id);
+
+        var dtoMap = new HashMap<String, List<SaidaTarefaDTO>>();
+        tarefasQuadro.entrySet().stream().forEach(entry ->  {
+            List<SaidaTarefaDTO> dtoList = entry.getValue().stream().map(SaidaTarefaDTO::new).toList();
+            dtoMap.put(entry.getKey().getTitulo(), dtoList);
+        });
+
+        return ResponseEntity.ok(dtoMap);
     }
 
     @PutMapping("/{id}")

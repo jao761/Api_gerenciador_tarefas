@@ -45,4 +45,8 @@ public class Quadro {
     public Quadro(QuadroDTO dto){
         this.titulo = dto.titulo();
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -66,6 +66,10 @@ public class Tarefa {
     public void setStatus(StatusTarefa status) {
         this.status = status;
     }
+
+    public void setQuadro(Quadro quadro) {
+        this.quadro = quadro;
+    }
 }
 
 
